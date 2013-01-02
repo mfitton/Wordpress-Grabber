@@ -6,36 +6,21 @@ WordpressGrab
 Created by Max Fitton on 2012-12-16.
 Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 """
-
+#in loc tags
 import sys
-import os
-import urllib
-import re
+from bs4 import BeautifulSoup
 
-class BlogPost:
-   '''
-   Class that can parse the contents of a wordpress html blog post link and create
-   text files with the date of the post, the title, the author, and the text, in
-   that order.
+def get_list_of_posts(xml_file):
+   list_of_posts = []
+   sitemap = open(xml_file)
+   soup = BeautifulSoup(sitemap, 'xml')
+   for loctag in soup.find_all('loc'):
+      list_of_posts.append( loctag.get_text() )
+   print list_of_posts
+   return list_of_posts
    
-   Takes a web address to a wordpress blog post for an argument.
-     
-   '''
-	def __init__(self, filename):
-	   text = urllib.urlopen(filename).read()
-	   
-	def get_title(text):
-	   '''Gets the post title with regex'''
-	   match = re.search(r"<title>\s([ \w]+) &laquo",text)
-	   title = match.group(1)
-	def get_body(text):
-	   '''Gets the post body with regex and removes <p> tags and the like, replacing
-	      them with tabs '''
-	   match = re.search(r"")
-	
-	def parse(text):
-	   
-	
+def main():
+	get_list_of_posts('sitemap.xml')
 
 if __name__ == '__main__':
-	pass
+	main()
